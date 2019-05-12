@@ -20,6 +20,8 @@ features to your application.
 Screenshot for Api weather
 ![Screenshot (17)](https://user-images.githubusercontent.com/36669490/57582872-a4a22a00-74e3-11e9-897a-331db5838a00.png)
 
+Screenshot for Api Currency
+![Screenshot (18)](https://user-images.githubusercontent.com/36669490/57582873-a4a22a00-74e3-11e9-8427-4aa96a98b538.png)
 
 DIRECTORY STRUCTURE
 -------------------
