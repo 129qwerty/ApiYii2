@@ -17,6 +17,10 @@ features to your application.
 [![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-basic.svg)](https://packagist.org/packages/yiisoft/yii2-app-basic)
 [![Build Status](https://travis-ci.org/yiisoft/yii2-app-basic.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-app-basic)
 
+Screenshot for Api weather
+![Screenshot (17)](https://user-images.githubusercontent.com/36669490/57582872-a4a22a00-74e3-11e9-897a-331db5838a00.png)
+
+
 DIRECTORY STRUCTURE
 -------------------
 
