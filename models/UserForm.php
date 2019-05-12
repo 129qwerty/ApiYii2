@@ -11,7 +11,7 @@ class UserForm extends Model
 	public function rules()
 	{
 		return [
-			[['name'], 'string', 'min' => 2]
+			[['name'], 'required']
 			];
 	}
 }

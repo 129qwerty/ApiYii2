@@ -12,6 +12,7 @@ use app\models\ContactForm;
 use linslin\yii2\curl;
 use yii\helpers\Json;
 use app\models\UserForm;
+use app\models\EntryForm;
 
 
 class SiteController extends Controller
@@ -132,34 +133,54 @@ class SiteController extends Controller
 
     public function actionAjax()
     {
-        $model = new UserForm;
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-            if ($model->load(Yii::$app->requset->post()) && $model->save()) {
-                return [
-                    'data' => [
-                        'success' => true,
-                        'model' => $model,
-                        'message' => 'Model has been saved.',
-                    ],
-                    'code' => 0,
-                ];
-            } else {
-                return [
-                    'data' => [
-                        'success' => false,
-                        'model' => null,
-                        'message' => 'An error occured.',
-                    ],
-                    'code' => 1, // Some semantic codes that you know them for yourself
-                ];
-            }
-        }
-        else
+        $weather = new UserForm;
+        $weather->name = Yii::$app->request->post('name');
+        if ($weather->load(Yii::$app->request->post()) && $weather->validate()) 
         {
-            return $this->render('home', ['model' => $model]);
-        }
+            $weatherstring = $weather->name;
+            
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "http://api.openweathermap.org/data/2.5/weather?q=" . $weatherstring . "&appid=c438b94e9064ccfbb26538fc3701cb26",
+                    CURLOPT_RETURNTRANSFER => 1
+            ));
 
+            $weatherresponse = curl_exec($curl);
+            $weatherresponse = json_decode($weatherresponse, true);
+            
+
+            return $this->render('home', ['weather' => $weather, 'weatherresponse' => $weatherresponse]);
+        }
+        return $this->render('home', ['weather' => $weather]);
+    }
+
+    public function actionCurrencyapi()
+    {
+        $model = new EntryForm();
+        $model->from = Yii::$app->request->post('from');
+        $model->to = Yii::$app->request->post('to');
+        $model->amount = Yii::$app->request->post('amount');
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) 
+        {
+
+            $string = $model->from."_".$model->to;
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://free.currconv.com/api/v7/convert?q=$string&compact=ultra&apiKey=052bde0bc323b2bebe7a",
+                CURLOPT_RETURNTRANSFER => 1));
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+
+            $response = json_decode($response, true);
+
+            $rate = $response[$string];
+            $total = $rate * $model->amount;
+
+            return $this->render('currency', ['model' => $model, 'response' => $response, 'total' => $total]);    
+        }
+        return $this->render('currency', ['model' => $model]);
     }
 }
